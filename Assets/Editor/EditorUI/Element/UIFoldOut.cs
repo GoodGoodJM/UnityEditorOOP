@@ -6,6 +6,9 @@ namespace GGM.Editor.UI.Element
 {
     public class UIFoldOut : UIElement
     {
+        public GUIStyle ContentStyle { get; set; }
+        public Color FontColor { get { return ContentStyle.normal.textColor; } set { ContentStyle.normal.textColor = value; } }
+
         public virtual string ContentLabel { get; set; }
         public virtual bool IsFoldOpened { get; set; }
         public virtual IUIElement ContentElement { get; set; }
@@ -14,12 +17,14 @@ namespace GGM.Editor.UI.Element
 
         public UIFoldOut()
         {
-            Style = EditorStyles.textArea;
+            LayoutStyle = EditorStyles.textArea;
+            ContentStyle = EditorStyles.foldout;
         }
 
         public UIFoldOut(string contentLabel, UIElement contentElement, bool isFoldOpened = false)
         {
-            Style = EditorStyles.textArea;
+            LayoutStyle = EditorStyles.textArea;
+            ContentStyle = EditorStyles.foldout;
             SetContents(contentLabel, contentElement, isFoldOpened);
         }
 
@@ -33,7 +38,7 @@ namespace GGM.Editor.UI.Element
         protected override void Content()
         {
             bool beforeState = IsFoldOpened;
-            IsFoldOpened = EditorGUILayout.Foldout(IsFoldOpened, ContentLabel);
+            IsFoldOpened = EditorGUILayout.Foldout(IsFoldOpened, ContentLabel, ContentStyle);
 
             if (beforeState != IsFoldOpened)
                 OnFoldStateChange.Execute(IsFoldOpened);

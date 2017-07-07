@@ -33,15 +33,19 @@ namespace GGM.Editor.UI.Window
             EditorGUILayout.EndScrollView();
         }
     }
-
-#if UNITY_2017
+    
     //2017의 .net버전을 낮게했을때 MissingHelper가 없기때문에 억지로 작성
-    public static class EnumHelperFor2017
+    public static class EnumHelper
     {
         public static bool HasFlag(this ScrollType self, ScrollType flag)
         {
-            return (self & flag) != 0;
+            return (self & flag) != flag;
+        }
+
+        public static bool HasFlag(this Enum self, Enum flag)
+        {
+            var flagValue = Convert.ToInt64(flag);
+            return (Convert.ToInt64(self) & flagValue) == flagValue;
         }
     }
-#endif
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace GGM.Editor.UI.Element
 {
+    //개발 진행중입니다.
     public class UIButton : UIElement
     {
         public string Text { get; set; }
@@ -12,34 +13,29 @@ namespace GGM.Editor.UI.Element
 
         public UIButton()
         {
-            Style = EditorStyles.miniButton;
         }
 
         public UIButton(string text)
         {
-            Style = EditorStyles.miniButton;
             Text = text;
         }
 
         public UIButton(GUIStyle style)
         {
-            Style = style;
+            LayoutStyle = style;
         }
 
         public UIButton(string text, GUIStyle style)
         {
             Text = text;
-            Style = style;
+            LayoutStyle = style;
         }
 
 
         protected override void Content()
         {
-            Rect rect = EditorGUILayout.BeginHorizontal(Style);
-            if (GUI.Button(rect, GUIContent.none))
+            if (GUILayout.Button(Text))
                 OnButtonClick.Execute();
-            GUILayout.Label(Text);
-            EditorGUILayout.EndHorizontal();
         }
     }
 }
