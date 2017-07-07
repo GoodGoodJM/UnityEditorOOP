@@ -7,7 +7,7 @@ namespace GGM.Editor.UI.Element
     {
         public GUIStyle LayoutStyle { get; set; }
 
-        public UIElement()
+        protected UIElement()
         {
             LayoutStyle = GUIStyle.none;
         }

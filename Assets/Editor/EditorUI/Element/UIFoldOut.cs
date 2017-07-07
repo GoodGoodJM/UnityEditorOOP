@@ -4,12 +4,8 @@ using UnityEngine;
 
 namespace GGM.Editor.UI.Element
 {
-    public class UIFoldOut : UIElement
+    public class UIFoldOut : UITextElement
     {
-        public GUIStyle ContentStyle { get; set; }
-        public Color FontColor { get { return ContentStyle.normal.textColor; } set { ContentStyle.normal.textColor = value; } }
-
-        public virtual string ContentLabel { get; set; }
         public virtual bool IsFoldOpened { get; set; }
         public virtual IUIElement ContentElement { get; set; }
 
@@ -19,18 +15,20 @@ namespace GGM.Editor.UI.Element
         {
             LayoutStyle = EditorStyles.textArea;
             ContentStyle = EditorStyles.foldout;
+            IsAllowRichText = true;
         }
 
         public UIFoldOut(string contentLabel, UIElement contentElement, bool isFoldOpened = false)
         {
             LayoutStyle = EditorStyles.textArea;
             ContentStyle = EditorStyles.foldout;
+            IsAllowRichText = true;
             SetContents(contentLabel, contentElement, isFoldOpened);
         }
 
-        public void SetContents(string contentLabel, UIElement contentElement, bool isFoldOpened)
+        public void SetContents(string text, UIElement contentElement, bool isFoldOpened)
         {
-            ContentLabel = contentLabel;
+            Text = text;
             ContentElement = contentElement;
             IsFoldOpened = isFoldOpened;
         }
@@ -38,7 +36,10 @@ namespace GGM.Editor.UI.Element
         protected override void Content()
         {
             bool beforeState = IsFoldOpened;
-            IsFoldOpened = EditorGUILayout.Foldout(IsFoldOpened, ContentLabel, ContentStyle);
+            
+            var foldoutStyle = EditorStyles.foldout;
+            foldoutStyle.richText = true;
+            IsFoldOpened = EditorGUILayout.Foldout(IsFoldOpened, Text, ContentStyle);
 
             if (beforeState != IsFoldOpened)
                 OnFoldStateChange.Execute(IsFoldOpened);

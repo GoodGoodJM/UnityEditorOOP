@@ -11,12 +11,14 @@ namespace GGM.Editor.UI.Element
         public UITextArea()
         {
             ContentStyle = EditorStyles.textArea;
+            IsAllowRichText = true;
         }
 
         public UITextArea(string text)
         {
-            Text = text;
             ContentStyle = EditorStyles.textArea;
+            IsAllowRichText = true;
+            Text = text;
         }
 
         protected override void Content()
