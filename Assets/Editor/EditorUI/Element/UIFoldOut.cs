@@ -1,16 +1,10 @@
 ﻿using System;
 using UnityEditor;
-using UnityEngine;
 
 namespace GGM.Editor.UI.Element
 {
     public class UIFoldOut : UITextElement
     {
-        public virtual bool IsFoldOpened { get; set; }
-        public virtual IUIElement ContentElement { get; set; }
-
-        public Action<bool> OnFoldStateChange { get; set; }
-
         public UIFoldOut()
         {
             LayoutStyle = EditorStyles.textArea;
@@ -26,6 +20,11 @@ namespace GGM.Editor.UI.Element
             SetContents(contentLabel, contentElement, isFoldOpened);
         }
 
+        public virtual bool IsFoldOpened { get; set; }
+        public virtual IUIElement ContentElement { get; set; }
+
+        public Action<bool> OnFoldStateChange { get; set; }
+
         public void SetContents(string text, UIElement contentElement, bool isFoldOpened)
         {
             Text = text;
@@ -35,8 +34,8 @@ namespace GGM.Editor.UI.Element
 
         protected override void Content()
         {
-            bool beforeState = IsFoldOpened;
-            
+            var beforeState = IsFoldOpened;
+
             var foldoutStyle = EditorStyles.foldout;
             foldoutStyle.richText = true;
             IsFoldOpened = EditorGUILayout.Foldout(IsFoldOpened, Text, ContentStyle);
@@ -48,15 +47,16 @@ namespace GGM.Editor.UI.Element
                 FoldOpened();
             else
                 FoldClosed();
-
         }
 
         protected virtual void FoldOpened()
         {
-            if(ContentElement != null)
+            if (ContentElement != null)
                 ContentElement.Draw();
         }
 
-        protected virtual void FoldClosed() { }
+        protected virtual void FoldClosed()
+        {
+        }
     }
 }

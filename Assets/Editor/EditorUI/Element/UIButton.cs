@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEditor;
 using UnityEngine;
 
 namespace GGM.Editor.UI.Element
@@ -7,10 +6,6 @@ namespace GGM.Editor.UI.Element
     //개발 진행중입니다.
     public class UIButton : UIElement
     {
-        public string Text { get; set; }
-
-        public Action OnButtonClick { get; set; }
-
         public UIButton()
         {
         }
@@ -30,6 +25,10 @@ namespace GGM.Editor.UI.Element
             Text = text;
             LayoutStyle = style;
         }
+
+        public string Text { get; set; }
+
+        public Action OnButtonClick { get; set; }
 
 
         protected override void Content()

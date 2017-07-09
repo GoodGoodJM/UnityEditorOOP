@@ -14,7 +14,7 @@ namespace GGM.Editor.UI.Element
 
         protected override void Content()
         {
-            string beforeText = Text;
+            var beforeText = Text;
             Text = EditorGUILayout.TextField(Text, ContentStyle);
             if (beforeText != Text)
                 OnTextChange(Text);

@@ -1,13 +1,10 @@
 ﻿using System;
 using UnityEditor;
-using UnityEngine;
 
 namespace GGM.Editor.UI.Element
 {
     public class UITextArea : UITextElement
     {
-        public Action<UITextArea> OnTextChange { get; set; }
-
         public UITextArea()
         {
             ContentStyle = EditorStyles.textArea;
@@ -21,9 +18,11 @@ namespace GGM.Editor.UI.Element
             Text = text;
         }
 
+        public Action<UITextArea> OnTextChange { get; set; }
+
         protected override void Content()
         {
-            string beforeText = Text;
+            var beforeText = Text;
             Text = EditorGUILayout.TextArea(Text, ContentStyle);
             if (beforeText != Text)
                 OnTextChange(this);
