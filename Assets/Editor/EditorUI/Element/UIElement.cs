@@ -19,7 +19,9 @@ namespace GGM.Editor.UI.Element
 
             GUI.backgroundColor = BackgroundColor;
             EditorGUILayout.BeginVertical(LayoutStyle);
+            GUI.backgroundColor = previousColor;
             Content();
+            GUI.backgroundColor = BackgroundColor;
             EditorGUILayout.EndVertical();
             GUI.backgroundColor = previousColor;
         }

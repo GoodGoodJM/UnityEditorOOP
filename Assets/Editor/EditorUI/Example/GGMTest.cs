@@ -71,6 +71,8 @@ namespace GGM.Editor.Example
 
             public TestVeiw(TestData data)
             {
+                if(UnityEngine.Random.Range(0, 3) == 1)
+                    BackgroundColor = Color.red;
                 LayoutStyle = EditorStyles.textArea;
                 Data = data;
                 _label.Text = Data.A;
