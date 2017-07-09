@@ -12,6 +12,8 @@ namespace GGM.Editor.Example
 {
     class GGMTest : UIHeaderScrollWindow
     {
+        public const string LabelFormat = "<color=#008000ff>{0}</color>  Test";
+
         [MenuItem("Test/TestEditor")]
         public static void GGMTestEditor()
         {
@@ -28,8 +30,8 @@ namespace GGM.Editor.Example
         {
             HeaderElement = _filterTextField;
             _filterTextField.OnTextChange += text => _list.FilterText = text;
-            for(int i = 0; i < 20; i++)
-                _testDataList.Add(new TestData() { A = i.ToString() });
+            for(int i = 0; i < 40; i++)
+                _testDataList.Add(new TestData() { A = string.Format(LabelFormat, i) });
             _list.SetElements(_testDataList);
             Profiler.EndSample();
         }
@@ -64,15 +66,18 @@ namespace GGM.Editor.Example
 
         public class TestVeiw : ElementView
         {
+            private readonly UILabel _label = new UILabel();
+
             public TestVeiw(TestData data)
             {
                 LayoutStyle = EditorStyles.textArea;
                 Data = data;
+                _label.Text = Data.A;
             }
 
             protected override void Content()
             {
-                EditorGUILayout.LabelField(Data.A);
+                _label.Draw();
             }
         }
     }
