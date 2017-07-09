@@ -10,12 +10,6 @@ namespace GGM.Editor.UI.Element
             LayoutStyle = GUIStyle.none;
         }
 
-        public Texture2D BackgroundTexture
-        {
-            get { return LayoutStyle.normal.background; }
-            set { LayoutStyle.normal.background = value; }
-        }
-
         public Color BackgroundColor { get; set; }
         public GUIStyle LayoutStyle { get; set; }
 
