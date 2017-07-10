@@ -8,6 +8,7 @@ namespace GGM.Editor.UI.Element
         protected UIElement()
         {
             LayoutStyle = GUIStyle.none;
+            BackgroundColor = Color.white;
         }
 
         public Color BackgroundColor { get; set; }

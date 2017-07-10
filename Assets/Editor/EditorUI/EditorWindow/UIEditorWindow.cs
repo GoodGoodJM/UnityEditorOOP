@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using GGM.Editor.UI.Element;
+using UnityEditor;
 using UnityEngine;
 
 namespace GGM.Editor.UI.Window
@@ -9,6 +10,7 @@ namespace GGM.Editor.UI.Window
     public abstract class UIEditorWindow : EditorWindow
     {
         public virtual GUIStyle Style { get; set; }
+        public IUIElement RootUIElement { get; set; }
 
         protected UIEditorWindow()
         {
@@ -18,7 +20,7 @@ namespace GGM.Editor.UI.Window
         public virtual void Draw()
         {
             EditorGUILayout.BeginVertical(Style);
-            Content();
+            RootUIElement.Draw();
             EditorGUILayout.EndVertical();
         }
 
@@ -27,7 +29,5 @@ namespace GGM.Editor.UI.Window
         protected virtual void OnGUI() { Draw(); }
 
         protected abstract void OnDestroy();
-
-        protected abstract void Content();
     }
 }

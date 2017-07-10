@@ -30,6 +30,7 @@ namespace GGM.Editor.Example
         protected override void Awake()
         {
             HeaderElement = _filterTextField;
+            RootUIElement = _list;
             _filterTextField.OnTextChange += text => _list.FilterText = text;
             for(int i = 0; i < 40; i++)
                 _testDataList.Add(new TestData() { A = string.Format(LabelFormat, i) });
@@ -40,11 +41,6 @@ namespace GGM.Editor.Example
         protected override void OnDestroy()
         {
             Debug.Log("On Destory");
-        }
-
-        protected override void Content()
-        {
-            _list.Draw();
         }
     }
 
