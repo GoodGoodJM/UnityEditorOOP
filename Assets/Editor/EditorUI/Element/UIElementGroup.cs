@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using GhostSoul.Editor.EnhancedLogConsole.Elements;
-using Global.Constants;
 using UnityEditor;
 using UnityEngine;
 
@@ -99,7 +97,7 @@ namespace GGM.Editor.UI.Element
             foreach (var data in elementDataList)
             {
                 var view = CreateChild(data);
-                Debugs.Assert(view != null);
+                Debug.Assert(view != null);
                 Elements.Add(view);
                 view.OnSizeChange += () => IsRefreshed = false;
             }
