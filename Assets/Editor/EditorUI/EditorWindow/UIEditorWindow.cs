@@ -10,7 +10,7 @@ namespace GGM.Editor.UI.Window
     public abstract class UIEditorWindow : EditorWindow
     {
         public virtual GUIStyle Style { get; set; }
-        public IUIElement RootUIElement { get; set; }
+        public UIElement RootUIElement { get; set; }
 
         protected UIEditorWindow()
         {
@@ -19,7 +19,7 @@ namespace GGM.Editor.UI.Window
 
         public virtual void Draw()
         {
-            EditorGUILayout.BeginVertical(Style);
+            EditorGUILayout.BeginVertical(Style == null ? GUIStyle.none : Style);
             RootUIElement.Draw();
             EditorGUILayout.EndVertical();
         }

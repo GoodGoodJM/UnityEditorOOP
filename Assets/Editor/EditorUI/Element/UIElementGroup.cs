@@ -1,5 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using GhostSoul.Editor.EnhancedLogConsole.Elements;
+using Global.Constants;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,15 +19,73 @@ namespace GGM.Editor.UI.Element
 
         public int SpaceSize { get; set; }
         public List<ElementView> Elements { get; private set; }
+        public Rect ViewRect { get; set; }
+
+        public bool IsRefreshed { get; set; }
 
         protected override void Content()
         {
-            foreach (var child in Elements)
-                if (CheckCanDraw(child))
+            var filterdElements = Elements.Where(CheckCanDraw).ToList();
+
+            if (ViewRect == default(Rect))
+            {
+                foreach (var child in filterdElements)
                 {
                     child.Draw();
                     GUILayout.Space(SpaceSize);
                 }
+            }
+            else
+            {
+                if (!IsRefreshed)
+                    DrawForRefresh(filterdElements);
+                else
+                    DrawCulling(filterdElements);
+            }
+        }
+
+        private void DrawForRefresh(List<ElementView> filterdElements)
+        {
+            foreach (var child in filterdElements)
+            {
+                child.Draw();
+                if (Event.current.type != EventType.Repaint)
+                    child.LayoutRect = default(Rect);
+                GUILayout.Space(SpaceSize);
+            }
+            if (Event.current.type == EventType.Repaint)
+                IsRefreshed = true;
+        }
+
+        private void DrawCulling(List<ElementView> filterdElements)
+        {
+            float topSpaceHeight = 0;
+            float bottomSpaceHeight = 0;
+            var showedElements = new List<ElementView>();
+            UIElement lastShowedElement = null;
+            foreach (var element in filterdElements)
+            {
+                if (element.LayoutRect.yMax < ViewRect.y)
+                    topSpaceHeight = element.LayoutRect.yMax;
+                else if (element.LayoutRect.yMax > ViewRect.y && element.LayoutRect.y < ViewRect.yMax)
+                    showedElements.Add(element);
+                else
+                    bottomSpaceHeight = element.LayoutRect.yMax;
+            }
+
+            GUILayout.Space(topSpaceHeight);
+            foreach (var element in showedElements)
+            {
+                element.Draw();
+                GUILayout.Space(SpaceSize);
+                lastShowedElement = element;
+            }
+            if (lastShowedElement != null)
+            {
+                float bottomSpace = bottomSpaceHeight - lastShowedElement.LayoutRect.yMax;
+                if (bottomSpace > 0f)
+                    GUILayout.Space(bottomSpace);
+            }
         }
 
         protected virtual bool CheckCanDraw(ElementView elementView)
@@ -32,21 +93,18 @@ namespace GGM.Editor.UI.Element
             return true;
         }
 
-        /// <summary>
-        ///     List 데이터를 넣어줌으로서 view를 지정합니다.
-        ///     이전의 모델과 비교해서 추가, 제거된 부분만 적용합니다.
-        ///     만일 형식 매개변수 T가 value타입일 경우에는 반드시 Equals를 오버라이딩 해주어야 합니다. 만일 그렇지 않으면 대량의 GC가 발생할 수 있습니다.
-        /// </summary>
-        /// <param name="elementDataList"></param>
         public void SetElements(List<T> elementDataList)
         {
-            foreach (var element in Elements)
-                if (!elementDataList.Contains(element.Data))
-                    Elements.Remove(element);
+            Elements.Clear();
+            foreach (var data in elementDataList)
+            {
+                var view = CreateChild(data);
+                Debugs.Assert(view != null);
+                Elements.Add(view);
+                view.OnSizeChange += () => IsRefreshed = false;
+            }
 
-            foreach (var elememtData in elementDataList)
-                if (!Elements.IsContains(elememtData))
-                    Elements.Add(CreateChild(elememtData));
+            IsRefreshed = false;
         }
 
         /// <summary>

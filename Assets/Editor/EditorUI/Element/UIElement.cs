@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace GGM.Editor.UI.Element
@@ -13,6 +14,8 @@ namespace GGM.Editor.UI.Element
 
         public Color BackgroundColor { get; set; }
         public GUIStyle LayoutStyle { get; set; }
+        public Rect LayoutRect { get; set; }
+        public Action OnSizeChange { get; set; }
 
         public void Draw()
         {
@@ -24,6 +27,14 @@ namespace GGM.Editor.UI.Element
             Content();
             GUI.backgroundColor = BackgroundColor;
             EditorGUILayout.EndVertical();
+            if (Event.current.type == EventType.Repaint)
+            {
+                var privious = LayoutRect;
+                LayoutRect = GUILayoutUtility.GetLastRect();
+                if (privious != default(Rect) && privious.size != LayoutRect.size)
+                        OnSizeChange.Execute();
+                
+            }
             GUI.backgroundColor = previousColor;
         }
 
